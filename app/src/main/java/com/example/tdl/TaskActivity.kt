@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tdl.databinding.ActivityTaskBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -48,25 +49,17 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
                 var title = binding.titleInLay.toString()
                 var subtitle = binding.taskInLay.toString()
                 var priority = binding.spinnerCategory.selectedItem.toString()
-                var date = binding.dateEdit.toString()
-                var time = binding.timeEdit.toString()
-                GlobalScope.launch {
+                var date = myCalendar.time.date.toString()
+                var time = myCalendar.time.time.toString()
+                GlobalScope.launch{
                     db.todoDao().insertTask(TodoModel(title, subtitle, priority, date, time))
-                }
-                GlobalScope.launch {
                     db.todoDao().getTask().toString()
                 }
-
-
                 var intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
-
         }
-
         setUpSpinner()
-
-
     }
 
     private fun setUpSpinner() {
